@@ -17,7 +17,6 @@ export const App = () => {
     neutural: 0,
     bad: 0,
   });
-  console.log(state);
 
   const countTotalFeedback = () => {
     return Object.values(state).reduce((acc, value) => acc + value);
@@ -35,9 +34,6 @@ export const App = () => {
       style={{
         height: '100vh',
         padding: '60px',
-        // display: 'flex',
-        // justifyContent: 'center',
-        // alignItems: 'center',
         textAlign: 'center',
         fontSize: 40,
         color: '#010101',
