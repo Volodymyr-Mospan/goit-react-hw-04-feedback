@@ -4,6 +4,11 @@ import { nanoid } from 'nanoid';
 // import scss from 'components/Feedback/Feedback.module.scss';
 
 export const Statistics = ({ feedbackTypes, total, positivePercentage }) => {
+  const getColor = value => {
+    const hue = ((0 + value) * 120).toString(10);
+    return `hsl(${hue},100%,50%)`;
+  };
+
   return (
     <>
       {Object.entries(feedbackTypes).map(feedbackType => (
@@ -23,11 +28,6 @@ export const Statistics = ({ feedbackTypes, total, positivePercentage }) => {
     </>
   );
 };
-
-function getColor(value) {
-  const hue = ((0 + value) * 120).toString(10);
-  return `hsl(${hue},100%,50%)`;
-}
 
 Statistics.propTypes = {
   feedbackTypes: PropTypes.objectOf(PropTypes.number.isRequired).isRequired,

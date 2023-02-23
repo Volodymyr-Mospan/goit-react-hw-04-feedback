@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { useReducer } from 'react';
 import {
   FeedbackOptions,
   Statistics,
@@ -6,66 +6,61 @@ import {
   Notification,
 } from 'components/Feedback';
 
-export class App extends Component {
-  state = {
+function feedbackReducer(state, action) {
+  const feedbackType = action.target.name;
+  return { ...state, [feedbackType]: state[feedbackType] + 1 };
+}
+
+export const App = () => {
+  const [state, dispatch] = useReducer(feedbackReducer, {
     good: 0,
     neutural: 0,
     bad: 0,
-  };
+  });
+  console.log(state);
 
-  leaveFeedback = e => {
-    const { state } = this;
-    const feedbackType = e.target.name;
-
-    this.setState(() => ({
-      [feedbackType]: state[feedbackType] + 1,
-    }));
+  const countTotalFeedback = () => {
+    return Object.values(state).reduce((acc, value) => acc + value);
   };
-
-  countTotalFeedback = () => {
-    return Object.values(this.state).reduce((acc, value) => acc + value);
-  };
-  countPositiveFeedbackPercentage = () => {
-    const { good } = this.state;
-    const feedbackPercentage = (100 / this.countTotalFeedback()) * good;
+  const countPositiveFeedbackPercentage = () => {
+    const { good } = state;
+    const feedbackPercentage = (100 / countTotalFeedback()) * good;
     return Math.round(feedbackPercentage) || 0;
   };
 
-  render() {
-    const total = this.countTotalFeedback();
+  const total = countTotalFeedback();
 
-    return (
-      <div
-        style={{
-          height: '100vh',
-          padding: '60px',
-          // display: 'flex',
-          // justifyContent: 'center',
-          // alignItems: 'center',
-          textAlign: 'center',
-          fontSize: 40,
-          color: '#010101',
-        }}
-      >
-        <Section title={'Please leave feedback'}>
-          <FeedbackOptions
-            options={Object.keys(this.state)}
-            onLeaveFeedback={this.leaveFeedback}
+  return (
+    <div
+      style={{
+        height: '100vh',
+        padding: '60px',
+        // display: 'flex',
+        // justifyContent: 'center',
+        // alignItems: 'center',
+        textAlign: 'center',
+        fontSize: 40,
+        color: '#010101',
+      }}
+    >
+      <Section title={'Please leave feedback'}>
+        <FeedbackOptions
+          options={Object.keys(state)}
+          onLeaveFeedback={dispatch}
+        />
+      </Section>
+
+      <Section moreStyles={'__statistics'} title={'Statistics'}>
+        {total ? (
+          <Statistics
+            feedbackTypes={state}
+            total={total}
+            positivePercentage={countPositiveFeedbackPercentage()}
           />
-        </Section>
-
-        <Section moreStyles={'__statistics'} title={'Statistics'}>
-          {total ? (
-            <Statistics
-              feedbackTypes={this.state}
-              total={total}
-              positivePercentage={this.countPositiveFeedbackPercentage()}
-            />
-          ) : (
-            <Notification message="There is no feedback" />
-          )}
-        </Section>
-      </div>
-    );
-  }
-}
+        ) : (
+          <Notification message="There is no feedback" />
+        )}
+      </Section>
+    </div>
+  );
+};
