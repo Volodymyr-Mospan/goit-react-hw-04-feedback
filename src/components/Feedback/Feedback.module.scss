@@ -1,0 +1,29 @@
+@import 'src/styles/_text.scss';
+
+.section {
+  max-width: 600px;
+  border: 10px inset;
+  padding: 40px;
+  background-color: #c4c4c4;
+}
+
+.section__title {
+  font-size: textSizeTitle;
+  margin: 0;
+  margin-bottom: 20px;
+}
+
+.section__statistics {
+  margin: 0;
+  margin-bottom: 20px;
+  text-transform: capitalize;
+}
+
+.btn {
+  padding: 10px;
+  min-width: 100px;
+
+  &:not(:last-child) {
+    margin-right: 20px;
+  }
+}
